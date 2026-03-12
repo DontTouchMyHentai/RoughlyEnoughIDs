@@ -27,6 +27,8 @@ public class BiomeContainer implements BiomeAccessor {
     }
 
     private int getIndex(int x, int z) {
+        Preconditions.checkElementIndex(x, 16, "chunkLocalX");
+        Preconditions.checkElementIndex(z, 16, "chunkLocalZ");
         return (z << 4) | x;
     }
 
@@ -65,13 +67,11 @@ public class BiomeContainer implements BiomeAccessor {
 
     @Override
     public int getBiomeId(int chunkLocalX, int chunkLocalZ) {
-        Preconditions.checkArgument(chunkLocalX <= 15);
-        Preconditions.checkArgument(chunkLocalZ <= 15);
-
         return getBiomeId(getIndex(chunkLocalX, chunkLocalZ));
     }
 
     public int getBiomeId(int index) {
+        Preconditions.checkElementIndex(index, size(), "biomeIndex");
         return biomes.get()[index];
     }
 
@@ -84,10 +84,14 @@ public class BiomeContainer implements BiomeAccessor {
     }
 
     public void setBiome(int index, int biomeId) {
+        Preconditions.checkElementIndex(index, size(), "biomeIndex");
         biomes.get()[index] = biomeId;
     }
 
     public void setBiomes(int[] biomes) {
+        Preconditions.checkArgument(biomes.length == size(),
+                "Expected %s biome IDs but got %s",
+                size(), biomes.length);
         System.arraycopy(biomes, 0, this.biomes.get(), 0, size());
     }
 
