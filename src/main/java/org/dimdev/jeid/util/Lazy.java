@@ -8,7 +8,7 @@ public class Lazy<T> implements Supplier<T> {
     private static final Lazy<Optional<?>> EMPTY = Lazy.of(Optional::empty);
 
     private final Supplier<T> delegate;
-    private T cachedValue;
+    private volatile T cachedValue;
 
     private Lazy(Supplier<T> delegate) {
         this.delegate = delegate;
